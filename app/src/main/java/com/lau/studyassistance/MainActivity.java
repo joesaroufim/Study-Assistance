@@ -28,7 +28,12 @@ public class MainActivity extends AppCompatActivity {
             name_index = cursor.getColumnIndex("name");
             cursor.moveToFirst();
 
-            
+            while (cursor != null){
+                String name = cursor.getString(code_index) + " " + cursor.getString(name_index);
+
+
+                cursor.moveToNext();
+            }
 
         }catch(Exception e){
             e.printStackTrace();
