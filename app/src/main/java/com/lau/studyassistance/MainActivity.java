@@ -35,6 +35,12 @@ public class MainActivity extends AppCompatActivity {
 
         row_index = 0;
 
+        CSC498G = "https://ionicframework.com/";
+        HST242H = "https://www.edx.org/learn/middle-east";
+        MEE548 = "https://www.media.mit.edu/groups/biomechatronics/overview/";
+        GNE340 = "https://www.edx.org/course/entrepreneurship-for-engineers";
+
+
         try{
             SQLiteDatabase sql = this.openOrCreateDatabase("final_exam_db", MODE_PRIVATE, null);
             sql.execSQL("CREATE Table IF NOT EXISTS exams (code VARCHAR, name VARCHAR)");
