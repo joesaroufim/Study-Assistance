@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TableLayout;
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         HST242H = "https://www.edx.org/learn/middle-east";
         MEE548 = "https://www.media.mit.edu/groups/biomechatronics/overview/";
         GNE340 = "https://www.edx.org/course/entrepreneurship-for-engineers";
+        String[] pages = {CSC498G, HST242H, MEE548, GNE340};
 
 
         try{
@@ -53,8 +55,9 @@ public class MainActivity extends AppCompatActivity {
             code_index = cursor.getColumnIndex("code");
             name_index = cursor.getColumnIndex("name");
             cursor.moveToFirst();
+            Log.i ("code", cursor.getString(code_index));
 
-            while (cursor != null){
+            do {
                 final TableRow new_row = new TableRow(getApplicationContext());
                 col1 = new TextView(getApplicationContext());
                 col2= new TextView(getApplicationContext());
@@ -63,8 +66,9 @@ public class MainActivity extends AppCompatActivity {
                 col1.setGravity(Gravity.CENTER);
                 col1.setTypeface(null, Typeface.BOLD);
                 col2.setText(cursor.getString(name_index));
-                col1.setGravity(Gravity.CENTER);
-                col1.setTypeface(null, Typeface.BOLD);
+                col2.setTextSize(18);
+                col2.setGravity(Gravity.CENTER);
+                col2.setTypeface(null, Typeface.BOLD);
                 new_row.addView(col1);
                 new_row.addView(col2);
                 new_row.setId(row_index);
@@ -72,16 +76,16 @@ public class MainActivity extends AppCompatActivity {
                 new_row.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent next = new Intent("android.intent.action.VIEW",
-                                Uri.parse(cursor.getString(code_index)));
+                        Intent next = new Intent(Intent.ACTION_VIEW, Uri.parse(pages[new_row.getId()]));
+                        startActivity(next);
                     }
                 });
-
+                table.addView(new_row);
                 row_index++;
-                cursor.moveToNext();
-            }
+            }while (cursor.moveToNext());
 
         }catch(Exception e){
+            Log.i ("exceptt", e.getMessage());
             e.printStackTrace();
         }
     }
