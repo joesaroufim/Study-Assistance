@@ -7,6 +7,7 @@
     tools:context=".MainActivity">
 
     <TableLayout
+        android:id="@+id/table"
         android:layout_width="0dp"
         android:layout_height="463dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -16,7 +17,7 @@
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/textView"
