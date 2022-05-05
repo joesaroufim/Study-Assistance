@@ -11,30 +11,29 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
-    int code_index, name_index, row_index;
-    TextView col1, col2;
-    TableLayout table;
+    int code_index, name_index;
+
     String CSC498G, HST242H, MEE548, GNE340;
+    ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        table = (TableLayout) findViewById(R.id.table);
-
-        table.setColumnStretchable(0, true);
-        table.setColumnStretchable(1, true);
-
-        row_index = 0;
 
         CSC498G = "https://ionicframework.com/";
         HST242H = "https://www.edx.org/learn/middle-east";
@@ -42,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
         GNE340 = "https://www.edx.org/course/entrepreneurship-for-engineers";
         String[] pages = {CSC498G, HST242H, MEE548, GNE340};
 
+        listView = (ListView) findViewById(R.id.list);
+        ArrayList<String> list = new ArrayList<String>();
 
         try{
             SQLiteDatabase sql = this.openOrCreateDatabase("final_exam_db", MODE_PRIVATE, null);
@@ -58,35 +59,23 @@ public class MainActivity extends AppCompatActivity {
             Log.i ("code", cursor.getString(code_index));
 
             do {
-                final TableRow new_row = new TableRow(getApplicationContext());
-                col1 = new TextView(getApplicationContext());
-                col2= new TextView(getApplicationContext());
-                col1.setText(cursor.getString(code_index));
-                col1.setTextSize(18);
-                col1.setGravity(Gravity.CENTER);
-                col1.setTypeface(null, Typeface.BOLD);
-                col2.setText(cursor.getString(name_index));
-                col2.setTextSize(18);
-                col2.setGravity(Gravity.CENTER);
-                col2.setTypeface(null, Typeface.BOLD);
-                new_row.addView(col1);
-                new_row.addView(col2);
-                new_row.setId(row_index);
-
-                new_row.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent next = new Intent(Intent.ACTION_VIEW, Uri.parse(pages[new_row.getId()]));
-                        startActivity(next);
-                    }
-                });
-                table.addView(new_row);
-                row_index++;
+                list.add(cursor.getString(name_index));
             }while (cursor.moveToNext());
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,list);
+            listView.setAdapter(adapter);
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    Intent next = new Intent(Intent.ACTION_VIEW, Uri.parse(pages[i]));
+                    startActivity(next);
+                }
+            });
 
         }catch(Exception e){
             Log.i ("exceptt", e.getMessage());
             e.printStackTrace();
         }
+
     }
 }
